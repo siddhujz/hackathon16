@@ -27,6 +27,15 @@ var store_path = path.join(__dirname, 'hfc-key-store');
 console.log('Store path:'+store_path);
 var tx_id = null;
 
+var args = process.argv.slice(2);
+
+var studenDoc = args[0];
+
+
+console.log(studenDoc);
+
+
+
 // create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
 Fabric_Client.newDefaultKeyValueStore({ path: store_path
 }).then((state_store) => {
@@ -55,15 +64,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		//targets : --- letting this default to the peers assigned to the channel
 		chaincodeId: 'docledger',
 		fcn: 'queryStudentDoc',
-		args: ['StudentDoc8']
-		//fcn: 'queryStudentDoc',
-		//args: ['StudentDoc10']
-	};
-	const requestAll = {
-		//targets : --- letting this default to the peers assigned to the channel
-		chaincodeId: 'docledger',
-		fcn: 'queryAllStudentDocs',
-		args: ['StudentDoc8']
+		args: [studenDoc]
 		//fcn: 'queryStudentDoc',
 		//args: ['StudentDoc10']
 	};
@@ -71,14 +72,13 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		//targets : --- letting this default to the peers assigned to the channel
 		chaincodeId: 'docledger',
 		fcn: 'getHistoryForStudentDoc',
-		args: ['StudentDoc8']
+		args: [studenDoc]
 		//fcn: 'queryStudentDoc',
 		//args: ['StudentDoc10']
 	};
 	// send the query proposal to the peer
+	return channel.queryByChaincode(requestHistory);
 	//return channel.queryByChaincode(request);
-	return channel.queryByChaincode(requestAll);
-	//return channel.queryByChaincode(requestHistory);
 }).then((query_responses) => {
 	console.log("Query has completed, checking results");
 	// query_responses could have more than one  results if there multiple peers were used as targets
